@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Explain a BOT Chain transaction | TxExplain</title>
+  <meta name="description" content="Paste a BOT Chain transaction hash and read what it called, what moved, what it cost and, if it failed, why.">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap">
+  <script type="module" src="/src/app/app.js"></script>
+</head>
+<body>
+  <a class="visually-hidden" href="#main">Skip to content</a>
+  <div id="site-header"></div>
+  <main id="main" class="container app">
+    <noscript><p class="note">TxExplain reads the chain in your browser, so it needs JavaScript.</p></noscript>
+    <section class="app-top" aria-labelledby="app-h">
+      <h1 id="app-h">Paste a transaction hash.</h1>
+      <form id="hash-form" class="hash-form" novalidate>
+        <label class="visually-hidden" for="hash-input">Transaction hash</label>
+        <input class="field field--big" id="hash-input" name="hash" type="text" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="0x… transaction hash" aria-describedby="hash-error">
+        <button type="button" class="btn btn--quiet" id="paste-btn">Paste</button>
+        <button type="submit" class="btn btn--primary" id="explain-btn">Explain</button>
+      </form>
+      <p class="field-error" id="hash-error" role="alert"></p>
+      <div class="chips" id="example-chips"></div>
+      <details class="abi-panel" id="abi-panel">
+        <summary>Add ABI</summary>
+        <p class="muted">For a contract we don't know. Paste its ABI JSON, or drop a Hardhat or Remix artifact here.</p>
+        <label class="visually-hidden" for="abi-text">ABI JSON</label>
+        <textarea class="field field--area mono" id="abi-text" rows="5" placeholder='[{"type":"function","name":"vote", …}]' spellcheck="false"></textarea>
+        <div class="abi-actions"><button type="button" class="btn btn--quiet btn--sm" id="abi-apply">Use this ABI</button><input type="file" id="abi-file" accept=".json,application/json" class="visually-hidden" tabindex="-1"><button type="button" class="btn btn--quiet btn--sm" id="abi-pick">Choose a file</button><span class="muted" id="abi-status" role="status"></span></div>
+      </details>
+    </section>
+    <div id="stage" aria-live="polite"></div>
+  </main>
+  <div id="site-footer"></div>
+</body>
+</html>

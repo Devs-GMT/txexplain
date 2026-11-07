@@ -1,0 +1,107 @@
+/* Shared by the website and the app. Colours come from tokens.css only. */
+
+body { font-size: var(--text-md); }
+h1, h2, h3 { font-weight: 700; letter-spacing: var(--tracking-display); line-height: 1.1; color: var(--color-ink); }
+.mono, code, pre { font-family: var(--font-outlier); font-weight: 400; font-variant-ligatures: none; }
+.muted { color: var(--color-muted); }
+:where(strong) { font-weight: 600; }
+
+/* Buttons: pills. One amber primary per screen, ghost outline for the rest. */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 48px; padding: 0 var(--space-lg); border: 1px solid transparent; border-radius: var(--radius-pill); font: 600 var(--text-md)/1 var(--font-body); white-space: nowrap; text-decoration: none; cursor: pointer; transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out); }
+.btn--primary { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn--primary:hover { background: color-mix(in oklab, var(--color-accent) 88%, var(--color-ink)); }
+.btn--quiet { background: transparent; color: var(--color-ink); border-color: var(--color-rule); }
+.btn--quiet:hover { background: var(--color-paper-2); border-color: var(--color-muted); }
+.btn--sm { min-height: 40px; padding: 0 var(--space-md); font-size: var(--text-sm); }
+.btn:active { transform: translateY(1px); }
+.btn:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+.btn:disabled, .btn[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; transform: none; }
+.btn[aria-busy="true"] { cursor: progress; }
+.btn.is-connected { border-color: var(--color-success); }
+
+.icon-btn, .icon-link { display: inline-grid; place-items: center; min-width: 28px; min-height: 28px; padding: 0; border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--color-muted); cursor: pointer; text-decoration: none; font-size: var(--text-sm); transition: color var(--dur-micro) var(--ease-out), background-color var(--dur-micro) var(--ease-out); }
+.icon-btn:hover, .icon-link:hover { color: var(--color-ink); background: var(--color-paper-3); }
+.icon-btn.is-done { color: var(--color-success); }
+
+.chip { display: inline-flex; align-items: center; min-height: 36px; padding: 0 var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); background: transparent; color: var(--color-ink-2); font: 400 var(--text-sm)/1 var(--font-body); cursor: pointer; text-decoration: none; transition: border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out); }
+.chip:hover { border-color: var(--color-accent); color: var(--color-ink); }
+.chip:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 2px; }
+
+.tag { display: inline-flex; align-items: center; min-height: 26px; padding: 0 var(--space-sm); border-radius: var(--radius-pill); border: 1px solid var(--color-rule); font-size: var(--text-xs); color: var(--color-ink-2); }
+.tag--fail { border-color: var(--color-error); color: var(--color-error); }
+.tag--ok { border-color: var(--color-success); color: var(--color-success); }
+.tag--warn { border-color: var(--color-accent); color: var(--color-accent); }
+.tag--info { border-color: var(--color-info); color: var(--color-info); }
+
+.status { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: var(--radius-pill); font-weight: 700; font-size: var(--text-sm); flex-shrink: 0; }
+.status--ok { background: color-mix(in oklab, var(--color-success) 18%, transparent); color: var(--color-success); }
+.status--fail { background: color-mix(in oklab, var(--color-error) 18%, transparent); color: var(--color-error); }
+.status--wait { background: color-mix(in oklab, var(--color-accent) 18%, transparent); color: var(--color-accent); }
+
+/* A card has a hairline border and no shadow; only a failed card tints its whole border. */
+.card { background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: var(--radius-card); padding: var(--space-lg); }
+.card--fail { border-color: color-mix(in oklab, var(--color-error) 45%, var(--color-rule)); }
+
+.addr { display: inline-flex; align-items: center; gap: var(--space-2xs); }
+.is-typing::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -0.12em; background: var(--color-accent); }
+
+.field { width: 100%; min-height: 52px; padding: 0 var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); background: var(--color-paper-2); color: var(--color-ink); font: 400 var(--text-md)/1 var(--font-outlier); transition: border-color var(--dur-short) var(--ease-out); }
+.field::placeholder { color: var(--color-muted); }
+.field:hover { border-color: var(--color-muted); }
+.field:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; border-color: var(--color-accent); }
+.field[aria-invalid="true"] { border-color: var(--color-error); }
+.field-error { min-height: 1lh; margin-top: var(--space-xs); font-size: var(--text-sm); color: var(--color-error); }
+
+/* Announcement bar and nav */
+.marquee { overflow: hidden; background: var(--color-paper-2); border-bottom: 1px solid var(--color-rule); font: 400 var(--text-xs)/1 var(--font-outlier); text-transform: uppercase; letter-spacing: 0.08em; }
+.marquee-track { display: flex; width: max-content; padding-block: var(--space-sm); animation: marquee 48s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee-group { display: flex; flex-shrink: 0; align-items: center; }
+.marquee a { color: var(--color-accent); text-decoration: none; padding-inline: var(--space-lg); white-space: nowrap; }
+.marquee a:hover { text-decoration: underline; text-underline-offset: 0.3em; }
+.marquee-sep { color: var(--color-muted); }
+@keyframes marquee { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .marquee-track { animation: none; } .marquee-group[aria-hidden="true"] { display: none; } }
+.nav { position: sticky; top: 0; z-index: var(--z-sticky-nav); background: color-mix(in oklab, var(--color-paper) 92%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--color-rule); }
+.nav-inner { display: flex; align-items: center; justify-content: space-between; gap: var(--space-lg); min-height: 68px; }
+.nav-menu { display: flex; align-items: center; gap: var(--space-xl); }
+.nav-links { display: flex; gap: var(--space-lg); }
+.nav-links a { color: var(--color-ink-2); text-decoration: none; font-size: var(--text-md); transition: color var(--dur-short) var(--ease-out); }
+.nav-links a:hover { color: var(--color-ink); }
+.nav-actions { display: flex; align-items: center; gap: var(--space-sm); }
+.nav-toggle { display: none; }
+.logo { display: inline-flex; align-items: center; gap: var(--space-sm); color: var(--color-ink); text-decoration: none; }
+.logo-word { font-family: var(--font-display); font-weight: 700; font-size: var(--text-lg); letter-spacing: -0.02em; }
+@media (max-width: 60rem) {
+  .nav-toggle { display: inline-flex; }
+  .nav-menu { display: none; position: absolute; inset: 100% 0 auto 0; flex-direction: column; align-items: stretch; gap: var(--space-lg); padding: var(--space-lg) var(--gutter); background: var(--color-paper); border-bottom: 1px solid var(--color-rule); }
+  .nav-menu.is-open { display: flex; }
+  .nav-links { flex-direction: column; gap: var(--space-md); }
+  .nav-actions { flex-direction: column; align-items: stretch; }
+  .nav-actions .btn { width: 100%; }
+}
+
+/* Footer: the explanation card, then the link columns */
+.footer { margin-top: var(--section-gap); padding-block: var(--space-2xl) var(--space-xl); border-top: 1px solid var(--color-rule); }
+.explain-card { background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: var(--radius-card); padding: var(--space-lg); display: grid; gap: var(--space-lg); }
+.explain-card-head { display: flex; align-items: center; gap: var(--space-md); }
+.explain-card-text { font-size: var(--text-lg); color: var(--color-ink); max-width: none; min-height: 1.4em; }
+.explain-card-body { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-lg) var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-rule); }
+.botchain-logo { display: inline-flex; border-radius: var(--space-xs); }
+.botchain-logo:focus-visible { outline: 2px solid var(--color-focus); outline-offset: 4px; }
+.botchain-logo img { height: 40px; width: auto; }
+.contract { display: flex; flex-wrap: wrap; gap: var(--space-lg); margin: 0; }
+.contract div { display: grid; gap: var(--space-3xs); }
+.contract dt { font-size: var(--text-xs); color: var(--color-muted); }
+.contract dd { margin: 0; font-size: var(--text-sm); display: inline-flex; align-items: center; gap: var(--space-2xs); }
+.explain-card-body .btn { margin-left: auto; }
+.explain-card-stats { margin: 0; font-size: var(--text-xs); color: var(--color-muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.footer-cols { display: grid; grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); gap: var(--gap-columns); margin-top: var(--space-2xl); }
+.footer-brand p { margin-top: var(--space-md); color: var(--color-muted); max-width: 28ch; }
+.footer-h { font: 600 var(--text-sm)/1.2 var(--font-body); letter-spacing: 0; color: var(--color-ink); margin-bottom: var(--space-md); }
+.footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-sm); }
+.footer-cols a { color: var(--color-muted); text-decoration: none; font-size: var(--text-sm); transition: color var(--dur-short) var(--ease-out); }
+.footer-cols a:hover { color: var(--color-ink); }
+.footer-legal { margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-rule); color: var(--color-muted); font-size: var(--text-sm); max-width: none; }
+@media (max-width: 60rem) { .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } .footer-brand { grid-column: 1 / -1; } .explain-card-body .btn { margin-left: 0; } }
+@media (max-width: 40rem) { .explain-card-body { align-items: flex-start; flex-direction: column; } .explain-card-body .btn { width: 100%; } }
