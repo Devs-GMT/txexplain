@@ -5,7 +5,7 @@ export const CHAINS = {
 };
 
 export const DEBUG_NOTES = {
-  677: null,
+  677: "0xbA69870c74E127351C23498084f1d04f6C61DF41",
   968: "0xFa7b17eB7989DbF7A2D90a583A25d5Ad9e764b7d",
 };
 

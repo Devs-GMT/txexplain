@@ -40,7 +40,7 @@ Testnet RPC (`rpc.bohr.life`) may need a VPN depending on your network.
 | Chain | Address |
 | --- | --- |
 | Testnet 968 | `0xFa7b17eB7989DbF7A2D90a583A25d5Ad9e764b7d` |
-| Mainnet 677 | Not deployed yet |
+| Mainnet 677 | `0xbA69870c74E127351C23498084f1d04f6C61DF41` |
 
 Deploy with `npx hardhat run scripts/deploy.cjs --network botTestnet` (or `botMainnet`) using a fresh wallet in `.env`.
 
