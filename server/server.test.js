@@ -26,7 +26,7 @@ function mockRes() {
   res.setHeader = (k, v) => (res.headers[k] = v);
   return res;
 }
-const req = (over = {}) => ({ method: "POST", headers: { host: "app.test" }, query: {}, body: {}, socket: { remoteAddress: "1.1.1.1" }, ...over });
+const req = (over = {}) => ({ method: "POST", headers: { host: "app.test", "content-type": "application/json" }, query: {}, body: {}, socket: { remoteAddress: "1.1.1.1" }, ...over });
 
 let realFetch;
 beforeEach(() => { realFetch = globalThis.fetch; });
@@ -90,7 +90,7 @@ test("explain: rejects non-POST, bad body, missing key", async () => {
   assert.equal(res.code, 400);
   res = mockRes();
   await explain(req({ body: { facts } }), res);
-  assert.equal(res.code, 500);
+  assert.equal(res.code, 503);
 });
 
 test("explain: returns a verified summary and sends the model the facts only", async () => {

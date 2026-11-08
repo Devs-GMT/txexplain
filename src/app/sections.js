@@ -1,4 +1,5 @@
 import { formatUnits } from "ethers";
+import { iconCheck, iconCross, iconWait } from "../ui/icons.js";
 import { CHAINS } from "../config.js";
 import { PANIC } from "../lib/revert.js";
 import { addressChip, copyButton, fullDate, groupDigits, shortAddr, shortHash, timeAgo } from "../ui/format.js";
@@ -85,7 +86,7 @@ export function gasSection(f) {
         ? `The gas limit was ${f.gas.limitMultiple}× what it needed.`
         : "";
   return html`<div class="gas-bar" role="img" aria-label="${used} of ${limit} gas used"><span style="--pct:${pct}"></span></div>
-    <p class="num gas-line"><strong>${groupDigits(String(used))}</strong> <span class="muted">of ${groupDigits(String(limit))} gas (${(pct * 100).toFixed(1)}%)</span></p>
+    <p class="num gas-line"><strong data-count="${used}">${groupDigits(String(used))}</strong> <span class="muted">of ${groupDigits(String(limit))} gas (${(pct * 100).toFixed(1)}%)</span></p>
     <dl class="kv kv--tight">
       <div><dt>Gas price</dt><dd class="num">${gwei(f.gas.price)} gwei</dd></div>
       <div><dt>Cost</dt><dd class="num"><strong>${f.gas.costBot} BOT</strong></dd></div>
@@ -108,9 +109,9 @@ export function timelineSection(f) {
 export function statusCard(f, isExample) {
   const kind = f.status === "success" ? "ok" : f.status === "failed" ? "fail" : "wait";
   const label = { success: "Success", failed: "Failed", pending: "Pending" }[f.status];
-  const mark = { ok: "✓", fail: "✗", wait: "…" }[kind];
+  const mark = { ok: iconCheck, fail: iconCross, wait: iconWait }[kind];
   return html`<section class="card card--${kind} status-card" aria-label="Status">
-    <div class="status-row"><span class="status status--${kind}" aria-hidden="true">${mark}</span><h2 class="card-title">${label}</h2>${isExample ? html`<span class="tag tag--info">Example</span>` : ""}</div>
+    <div class="status-row"><span class="status status--${kind}" aria-hidden="true">${mark}</span><h2 class="card-title dot">${label}</h2>${isExample ? html`<span class="tag tag--info">Example</span>` : ""}</div>
     <dl class="kv kv--tight">
       <div><dt>Network</dt><dd>${CHAINS[f.chainId].name}</dd></div>
       ${f.status === "pending" ? "" : html`<div><dt>Block</dt><dd class="num">${f.block.toLocaleString("en-US")}</dd></div>
@@ -128,7 +129,7 @@ export function failureSection(f, extraFixes = []) {
   const panicNote = r.kind === "panic" ? html`<p class="muted">${PANIC[r.code] ?? ""}</p>` : "";
   const unsupported = r.kind === "replay-unsupported" || r.kind === "not-reproduced";
   return html`<section class="card card--fail failure" aria-labelledby="why-failed">
-    <div class="failure-head"><span class="status status--fail shake" aria-hidden="true">✗</span><h2 class="card-title" id="why-failed">Why it failed</h2></div>
+    <div class="failure-head"><span class="status status--fail shake" aria-hidden="true">${iconCross}</span><h2 class="card-title" id="why-failed">Why it failed</h2></div>
     <p class="failure-reason">${unsupported ? "Couldn't replay this call, so the exact reason is unknown." : r.message}</p>
     ${r.kind === "custom" && r.args.length ? html`<dl class="kv kv--tight">${r.args.map((a) => html`<div><dt>${a.name}</dt><dd class="mono">${a.value}</dd></div>`)}</dl>` : ""}
     ${panicNote}

@@ -1,6 +1,7 @@
 import { checkOrigin, rateLimited, setCors } from "../server/guards.js";
 import { askGroq } from "../server/explain-ai.js";
 import { verifySummary } from "../server/verify.js";
+import { sanitizeFacts } from "../server/sanitize.js";
 
 // Hashes are never logged; the only thing kept anywhere is the browser's own cache keyed by hash.
 export default async function handler(req, res) {
@@ -8,16 +9,19 @@ export default async function handler(req, res) {
   if (!checkOrigin(req)) return res.status(403).json({ error: "origin not allowed" });
   if (req.method === "OPTIONS") return res.status(204).end();
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
-  if (rateLimited(req)) return res.status(429).json({ error: "slow down" });
+  if (rateLimited(req, { limit: 10, name: "explain" })) return res.status(429).json({ error: "slow down" });
 
-  const facts = req.body?.facts;
+  res.setHeader("Cache-Control", "no-store");
+  if (!String(req.headers["content-type"] ?? "").includes("application/json")) return res.status(415).json({ error: "send JSON" });
+  const raw = req.body?.facts;
+  if (JSON.stringify(raw ?? null).length > 20_000) return res.status(413).json({ error: "facts too large" });
+  const facts = sanitizeFacts(raw);
   if (!facts || typeof facts !== "object" || !/^0x[0-9a-fA-F]{64}$/.test(facts.hash ?? "") || !facts.status) {
     return res.status(400).json({ error: "body must be { facts } from explainTx" });
   }
-  if (JSON.stringify(facts).length > 60_000) return res.status(413).json({ error: "facts too large" });
 
   const apiKey = process.env.GROQ_API_KEY;
-  if (!apiKey) return res.status(500).json({ error: "server is missing GROQ_API_KEY" });
+  if (!apiKey) return res.status(503).json({ error: "summary unavailable" });
 
   try {
     const options = { apiKey, model: process.env.GROQ_MODEL ?? "openai/gpt-oss-120b", signal: AbortSignal.timeout(25_000) };

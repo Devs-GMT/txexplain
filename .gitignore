@@ -7,3 +7,16 @@ node_modules/
 artifacts/
 cache/
 dist/
+test-results
+playwright-report
+.shots
+
+# Local working material, not part of the project
+screenshot saat ini/
+screenshot web giga/
+.claude/
+.hallmark/
+REPORT.md
+giga_reference_full.md
+project_context_full.txt
+prompt_analisis_dan_build.md

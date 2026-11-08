@@ -65,7 +65,10 @@ export async function signerFor(chainId) {
   if (!hasWallet()) throw new WalletError("no-wallet", "No wallet found. Install MetaMask to save notes and vote.");
   try {
     await ensureChain(chainId);
-    return await new BrowserProvider(window.ethereum).getSigner();
+    const provider = new BrowserProvider(window.ethereum);
+    // Never sign for a chain the wallet did not actually switch to: a wallet that ignored the switch would send the transaction elsewhere.
+    if (Number((await provider.getNetwork()).chainId) !== chainId) throw new WalletError("wrong-network", `Switch your wallet to ${CHAINS[chainId].name} and try again.`);
+    return await provider.getSigner();
   } catch (e) {
     throw describeWalletError(e);
   }

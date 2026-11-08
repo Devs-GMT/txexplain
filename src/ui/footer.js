@@ -2,19 +2,18 @@ import { CHAINS, DEBUG_NOTES, EXAMPLE_TXS, FOOTER_CHAIN, LINKS } from "../config
 import { readLatestNote, readStats } from "../lib/notes.js";
 import { copyButton, explorerAddr, shortAddr, timeAgo } from "./format.js";
 import { html } from "./html.js";
+import { iconCheck } from "./icons.js";
 import { logoMark } from "./logo.js";
-import { typeInto } from "./type.js";
 
 const contract = DEBUG_NOTES[FOOTER_CHAIN];
 const chain = CHAINS[FOOTER_CHAIN];
 const githubHref = LINKS.github ?? "/#trust";
-const docsHref = LINKS.github ? `${LINKS.github}#readme` : "/#trust";
 
 export const footer = html`<footer class="footer" id="footer">
   <div class="container">
     <section class="explain-card" aria-label="Latest debug note on the DebugNotes contract" data-footer-card>
       <div class="explain-card-head">
-        <span class="status status--ok" aria-hidden="true">✓</span>
+        <span class="status status--ok" aria-hidden="true">${iconCheck}</span>
         <p class="explain-card-text" data-footer-text aria-live="polite">Reading the latest note…</p>
       </div>
       <div class="explain-card-body">
@@ -33,13 +32,13 @@ export const footer = html`<footer class="footer" id="footer">
       <div class="footer-brand"><a class="logo" href="/" aria-label="TxExplain home">${logoMark}<span class="logo-word">TxExplain</span></a><p>Paste a BOT Chain hash. Get the story in plain English.</p></div>
       <nav aria-label="Product"><h2 class="footer-h">Product</h2><ul>
         <li><a href="/app">Explain a transaction</a></li>
-        <li><a href="/#story">Examples</a></li>
+        <li><a href="/#tour">Examples</a></li>
         <li><a href="/tx/${EXAMPLE_TXS.outOfGas}#notes">Debug notes</a></li>
       </ul></nav>
       <nav aria-label="Resources"><h2 class="footer-h">Resources</h2><ul>
-        <li><a href="${docsHref}">Docs</a></li>
+        <li><a href="${LINKS.botchainDocs}" target="_blank" rel="noopener">Docs</a></li>
         <li><a href="/app#errors">Common errors</a></li>
-        <li><a href="${LINKS.botchainDocs}" target="_blank" rel="noopener">BOT Chain docs</a></li>
+        <li><a href="${LINKS.faucet}" target="_blank" rel="noopener">Testnet faucet</a></li>
       </ul></nav>
       <nav aria-label="Project"><h2 class="footer-h">Project</h2><ul>
         <li><a href="${githubHref}"${LINKS.github ? ' target="_blank" rel="noopener"' : ""}>GitHub</a></li>
@@ -62,7 +61,7 @@ export async function hydrateFooter() {
     const sentence = latest
       ? `Someone saved a debug note on ${chain.name} ${timeAgo(latest.at)}.`
       : "No notes saved yet. The first one will show up here.";
-    typeInto(text, sentence);
+    text.textContent = sentence;
     stats.querySelector("[data-n]").textContent = counts.notes;
     stats.querySelector("[data-m]").textContent = counts.worked;
     stats.hidden = false;

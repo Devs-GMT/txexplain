@@ -1,7 +1,3 @@
-import "../styles/tokens.css";
-import "../styles/base.css";
-import "../styles/components.css";
-import "../styles/app.css";
 import Prism from "prismjs";
 import "prismjs/components/prism-json.js";
 import { CHAINS, EXAMPLE_TXS } from "../config.js";
@@ -18,6 +14,8 @@ import { typeInto } from "../ui/type.js";
 import { initWalletButtons } from "../ui/wallet-button.js";
 import { calledSection, eventsSection, failureSection, gasSection, moneySection, statusCard, timelineSection } from "./sections.js";
 import { initNotes, notesShell } from "./notes-ui.js";
+import { revealResult, startScan } from "./motion-app.js";
+import { initCursorGlow, initHexField } from "../site/fx.js";
 
 const $ = (sel) => document.querySelector(sel);
 const stage = $("#stage");
@@ -37,12 +35,15 @@ const exampleSet = new Set(Object.values(EXAMPLE_TXS).map((h) => h.toLowerCase()
 
 // ---- shell ---------------------------------------------------------------------------------
 
-mount($("#site-header"), html`${announcement}${navbar}`);
-mount($("#site-footer"), footer);
+// The HTML already carries the header and footer; these only fill in when it does not.
+if (!$("#site-header").children.length) mount($("#site-header"), html`${announcement}${navbar}`);
+if (!$("#site-footer").children.length) mount($("#site-footer"), footer);
 initNav();
 enableCopy();
 initWalletButtons();
 hydrateFooter();
+document.querySelectorAll("[data-hexhost]").forEach(initHexField);
+initCursorGlow();
 
 mount($("#example-chips"), html`<span class="muted chips-label">Try an example on testnet</span>${EXAMPLES.map(([label, hash]) => html`<button type="button" class="chip" data-hash="${hash}">${label}</button>`)}`);
 
@@ -87,7 +88,7 @@ function idleView() {
 }
 
 function loadingView() {
-  return html`<section class="card steps" aria-label="Progress"><ol>${STEPS.map(([key, label]) => html`<li data-step="${key}"><span class="step-mark" aria-hidden="true"></span>${label}</li>`)}</ol></section>`;
+  return html`<section class="card steps" aria-label="Progress"><ol>${STEPS.map(([key, label]) => html`<li data-step="${key}"><span class="step-mark" aria-hidden="true"></span>${label}</li>`)}</ol><p class="scan mono" data-scan aria-hidden="true"></p></section>`;
 }
 
 function setStep(name) {
@@ -96,6 +97,7 @@ function setStep(name) {
     li.classList.toggle("is-done", i < idx);
     li.classList.toggle("is-current", i === idx);
   });
+  state.scan?.settle?.((idx + 1) / STEPS.length);
 }
 
 function messageView(kind, title, body, retry) {
@@ -162,7 +164,11 @@ async function run(rawHash, { push = true, silent = false } = {}) {
   if (push && location.pathname !== `/tx/${hash}`) history.pushState({}, "", `/tx/${hash}`);
   document.title = `${shortHash(hash)} on TxExplain`;
   document.body.classList.add("has-result");
-  if (!silent) mount(stage, loadingView());
+  state.scan?.stop?.();
+  if (!silent) {
+    mount(stage, loadingView());
+    state.scan = startScan(stage.querySelector("[data-scan]"), hash);
+  }
   $("#explain-btn").setAttribute("aria-busy", "true");
 
   let raw = null;
@@ -188,7 +194,9 @@ async function run(rawHash, { push = true, silent = false } = {}) {
   if (id !== state.runId) return;
 
   $("#explain-btn").removeAttribute("aria-busy");
+  state.scan?.stop?.();
   mount(stage, resultView(facts, summary));
+  revealResult(stage);
   stage.querySelector("[data-raw]").innerHTML = Prism.highlight(JSON.stringify(raw, null, 2), Prism.languages.json, "json");
   typeInto(stage.querySelector("[data-typed]"), summary.summary);
   state.stopNotes = initNotes(stage.querySelector("#notes"), facts);
@@ -279,7 +287,10 @@ $("#abi-apply").addEventListener("click", () => applyAbi($("#abi-text").value));
 $("#abi-pick").addEventListener("click", () => $("#abi-file").click());
 $("#abi-file").addEventListener("change", async (e) => {
   const file = e.target.files[0];
-  if (file) {
+  if (file && file.size > 1_000_000) {
+    $("#abi-status").textContent = "That file is larger than 1 MB. Drop only the artifact or ABI.";
+    $("#abi-status").classList.add("is-error");
+  } else if (file) {
     $("#abi-text").value = await file.text();
     applyAbi($("#abi-text").value);
   }
@@ -289,7 +300,10 @@ panel.addEventListener("dragover", (e) => e.preventDefault());
 panel.addEventListener("drop", async (e) => {
   e.preventDefault();
   const file = e.dataTransfer.files[0];
-  if (file) {
+  if (file && file.size > 1_000_000) {
+    $("#abi-status").textContent = "That file is larger than 1 MB. Drop only the artifact or ABI.";
+    $("#abi-status").classList.add("is-error");
+  } else if (file) {
     panel.open = true;
     $("#abi-text").value = await file.text();
     applyAbi($("#abi-text").value);

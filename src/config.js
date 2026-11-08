@@ -24,10 +24,10 @@ export const TESTNET_USDT = { address: "0x75edC9335175Fc0552D51D48439F229c10420f
 // The footer card explains the latest note on mainnet; until mainnet exists it reads testnet and says so.
 export const FOOTER_CHAIN = DEBUG_NOTES[677] ? 677 : 968;
 
-// github stays null until the repo exists; the UI then points Docs and GitHub at the on-page "How it works" section.
 export const LINKS = {
   botchain: "https://botchain.ai",
-  botchainDocs: "https://dev-docs.botchain.ai",
+  botchainDocs: "https://dev-docs.botchain.ai/docs/intro/",
+  faucet: "https://faucet.botchain.ai/basic",
   x: "https://x.com/botprojectgf",
-  github: null,
+  github: "https://github.com/Devs-GMT/txexplain",
 };

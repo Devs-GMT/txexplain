@@ -2,7 +2,6 @@ import { EXAMPLE_TXS, LINKS } from "../config.js";
 import { html } from "./html.js";
 import { logo } from "./logo.js";
 
-const docsHref = LINKS.github ? `${LINKS.github}#readme` : "/#trust";
 
 // A looping band of one link. The second group is a copy for the seamless loop, so it is hidden from assistive tech.
 const marqueeGroup = (hidden) => html`<span class="marquee-group"${hidden ? " aria-hidden=\"true\"" : ""}>${Array.from({ length: 4 }, () => html`<a href="/tx/${EXAMPLE_TXS.customError}"${hidden ? " tabindex=\"-1\"" : ""}>See a failed transaction explained</a><span class="marquee-sep">/</span>`)}</span>`;
@@ -16,8 +15,8 @@ export const navbar = html`<header class="nav" data-nav>
     <div class="nav-menu" id="nav-menu">
       <nav class="nav-links" aria-label="Main">
         <a href="/#how">Product</a>
-        <a href="/#story">Examples</a>
-        <a href="${docsHref}">Docs</a>
+        <a href="/#tour">Examples</a>
+        <a href="${LINKS.botchainDocs}" target="_blank" rel="noopener">Docs</a>
       </nav>
       <div class="nav-actions">
         <button type="button" class="btn btn--quiet btn--sm" data-connect>Connect wallet</button>

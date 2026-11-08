@@ -9,102 +9,161 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
-  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Doto:wght@500;700;900&display=swap">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&display=swap">
+  <link rel="stylesheet" href="/src/styles/tokens.css">
+  <link rel="stylesheet" href="/src/styles/base.css">
+  <link rel="stylesheet" href="/src/styles/components.css">
+  <link rel="stylesheet" href="/src/styles/site.css">
   <script type="module" src="/src/site/site.js"></script>
 </head>
 <body>
+  <div class="hero-heat" aria-hidden="true"><i class="hero-spot"></i></div>
   <a class="visually-hidden" href="#main">Skip to content</a>
   <div id="site-header"></div>
   <main id="main">
     <noscript><p class="container note">TxExplain reads the chain in your browser, so it needs JavaScript. <a href="/app">Open the app</a>.</p></noscript>
 
-    <section class="hero container" aria-labelledby="hero-h">
-      <div class="hero-copy">
-        <h1 id="hero-h" class="hero-title" data-type="Paste a hash. Read what happened." aria-label="Paste a hash. Read what happened.">Paste a hash. Read what happened.</h1>
-        <p class="lead">Decode BOT Chain transactions and see why they failed.</p>
-        <div class="hero-actions">
-          <a class="btn btn--primary" href="/app">Explain a transaction</a>
-          <a class="btn btn--quiet" href="#story">See an example</a>
-        </div>
-      </div>
-
-      <div class="demo card" id="demo">
-        <div class="demo-top">
-          <div class="switch" role="tablist" aria-label="Example type">
-            <button type="button" role="tab" id="tab-failed" aria-selected="true" aria-controls="demo-panel" data-demo="failed">Failed</button>
-            <button type="button" role="tab" id="tab-success" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-demo="success">Success</button>
-            <button type="button" role="tab" id="tab-transfer" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-demo="transfer">Transfer</button>
+    <section class="hero" aria-labelledby="hero-h" data-hexhost data-hex="light">
+      <div class="container hero-in">
+        <canvas class="hexfield" aria-hidden="true"></canvas>
+        <div class="hero-head">
+          <div class="hero-copy">
+            <p class="label mono">Transactions for humans</p>
+            <h1 id="hero-h" class="hero-title" data-type="No more staring at hex." aria-label="No more staring at hex.">No more staring at hex.</h1>
           </div>
-          <span class="tag">Example</span>
+          <div class="hero-side">
+            <p class="lead">Paste any BOT Chain transaction. Get what happened, what it cost, and why it failed, in plain English.</p>
+            <p class="live mono" data-live>Latest block on BOT Chain <span class="num" data-block></span></p>
+          </div>
         </div>
-        <div class="demo-panel" id="demo-panel" role="tabpanel" aria-labelledby="tab-failed">
-          <div class="demo-line"><span class="status status--fail" data-demo-mark aria-hidden="true">✗</span><code class="mono muted" data-demo-hash>0x1116720c…3696a9</code></div>
-          <p class="demo-summary" data-demo-summary>0xA288…8C4C called markWorked on DebugNotes. It failed: Custom error AuthorCannotVote.</p>
-          <dl class="demo-facts" data-demo-facts></dl>
-        </div>
-        <div class="demo-foot">
-          <span class="mono muted num" data-demo-timer>0.0s</span>
-          <a href="/tx/0x1116720cc578b3a700f7c03336a6a58e79c6ab1cb8d388cd75722f2e433696a9" data-demo-open>Open this transaction</a>
+
+        <div class="demo deck card--fail" id="demo" data-tilt="2">
+          <div class="deck-screen">
+            <p class="deck-prompt dot" data-prompt aria-hidden="true">paste a hash, read the story</p>
+            <form class="demo-form" id="demo-form" novalidate>
+              <label class="visually-hidden" for="demo-input">Transaction hash</label>
+              <input class="field" id="demo-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" value="0x1116720cc578b3a700f7c03336a6a58e79c6ab1cb8d388cd75722f2e433696a9" aria-describedby="demo-error">
+              <button type="submit" class="btn btn--primary btn--sm" data-magnet>Explain</button>
+            </form>
+            <p class="field-error" id="demo-error" role="alert"></p>
+            <div class="demo-panel" id="demo-panel" role="tabpanel" aria-labelledby="tab-failed">
+              <ol class="steps-mini" data-demo-steps aria-label="Steps">
+                <li class="is-done">Fetching</li><li class="is-done">Decoding</li><li class="is-done">Reading events</li><li class="is-done">Writing summary</li>
+              </ol>
+              <div class="demo-line"><span class="status status--fail" data-demo-mark aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path pathLength="1" d="M4.4 4.4 11.6 11.6M11.6 4.4 4.4 11.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><p class="demo-summary" data-demo-summary>0xA288…8C4C called markWorked on DebugNotes. It failed: Custom error AuthorCannotVote.</p></div>
+              <dl class="demo-facts" data-demo-facts><div><dt>Function</dt><dd>markWorked</dd></div><div><dt>Result</dt><dd>Failed</dd></div><div><dt>Reason</dt><dd>AuthorCannotVote</dd></div><div><dt>Fix</dt><dd>Mark it from a different wallet than the author's</dd></div></dl>
+            </div>
+            <div class="demo-foot">
+              <span class="mono muted num" data-demo-timer>0:00</span>
+              <a href="/tx/0x1116720cc578b3a700f7c03336a6a58e79c6ab1cb8d388cd75722f2e433696a9" data-demo-open>Open this transaction</a>
+            </div>
+          </div>
+          <div class="deck-dial">
+            <span class="tag deck-tag">Example</span>
+            <div class="dial" role="tablist" aria-label="Example type">
+              <button type="button" role="tab" id="tab-success" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-demo="success">Success</button>
+              <button type="button" role="tab" id="tab-failed" aria-selected="true" aria-controls="demo-panel" data-demo="failed">Failed</button>
+              <button type="button" role="tab" id="tab-transfer" aria-selected="false" aria-controls="demo-panel" tabindex="-1" data-demo="transfer">Transfer</button>
+              <div class="dial-knob" aria-hidden="true"><span class="dial-notch"></span><span class="dial-core dot" data-dial-label>Failed</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <section class="band container" id="try" aria-labelledby="try-h" data-reveal>
-      <h2 class="sec-h" id="try-h">See what your transaction did</h2>
-      <form class="hash-form" id="try-form" novalidate>
+      <p class="sec-label mono"><span class="num">01</span>Try it</p>
+      <h2 class="sec-h" id="try-h">See what your transaction actually did</h2>
+      <form class="hash-form glow" id="try-form" novalidate>
         <label class="visually-hidden" for="try-input">Transaction hash</label>
-        <input class="field field--big" id="try-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="0x… transaction hash" aria-describedby="try-error">
-        <button type="submit" class="btn btn--primary">Explain</button>
+        <input class="field field--big" id="try-input" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste a tx hash" aria-describedby="try-error">
+        <button type="submit" class="btn btn--primary">Show me</button>
       </form>
       <p class="field-error" id="try-error" role="alert"></p>
       <div class="chips" id="try-chips"></div>
     </section>
 
+
+    <div class="ribbon" data-ribbon role="img" aria-label="What TxExplain reads: Error(string), Panic(uint256), Custom errors, Out of gas, Unknown functions, ERC-20 transfers, ERC-721 transfers, Contract creation, BOT transfers">
+      <div class="ribbon-track" data-ribbon-track><span class="ribbon-group"><span>Error(string)</span><span class="sep">/</span><span>Panic(uint256)</span><span class="sep">/</span><span>Custom errors</span><span class="sep">/</span><span>Out of gas</span><span class="sep">/</span><span>Unknown functions</span><span class="sep">/</span><span>ERC-20 transfers</span><span class="sep">/</span><span>ERC-721 transfers</span><span class="sep">/</span><span>Contract creation</span><span class="sep">/</span><span>BOT transfers</span><span class="sep">/</span></span><span class="ribbon-group" aria-hidden="true"><span>Error(string)</span><span class="sep">/</span><span>Panic(uint256)</span><span class="sep">/</span><span>Custom errors</span><span class="sep">/</span><span>Out of gas</span><span class="sep">/</span><span>Unknown functions</span><span class="sep">/</span><span>ERC-20 transfers</span><span class="sep">/</span><span>ERC-721 transfers</span><span class="sep">/</span><span>Contract creation</span><span class="sep">/</span><span>BOT transfers</span><span class="sep">/</span></span></div>
+    </div>
+
+    <section class="band container" id="live" aria-labelledby="live-h">
+      <p class="sec-label mono"><span class="num">02</span>Live</p>
+      <h2 class="sec-h" id="live-h" data-split>Read a real one</h2>
+      <p class="lead feed-lead">The newest transactions on BOT Chain mainnet, straight from the chain.</p>
+      <div class="feed card">
+        <div class="feed-head mono muted"><span>Latest block <span class="num" data-feed-block>…</span></span><span data-feed-status>Reading the chain…</span></div>
+        <div class="scene-wrap"><ul class="legend mono" data-legend aria-hidden="true"></ul><canvas class="scene" data-scene aria-hidden="true"></canvas><div class="scene-tip" data-scene-tip hidden></div></div>
+        <ul class="feed-list" data-feed-list aria-live="polite"></ul>
+      </div>
+    </section>
+
     <section class="band container" id="decode" aria-labelledby="decode-h">
-      <h2 class="sec-h" id="decode-h" data-reveal>From hex to English</h2>
-      <div class="decode" data-reveal>
+      <p class="sec-label mono"><span class="num">03</span>Decode</p>
+      <h2 class="sec-h" id="decode-h" data-split>Hex goes in. English comes out.</h2>
+      <div class="decode">
         <div class="switch" role="tablist" aria-label="Decode example">
           <button type="button" role="tab" aria-selected="true" data-decode="transfer">Transfer</button>
           <button type="button" role="tab" aria-selected="false" tabindex="-1" data-decode="failed">Failed</button>
           <button type="button" role="tab" aria-selected="false" tabindex="-1" data-decode="call">Call</button>
         </div>
-        <div class="strip card">
+        <div class="strip">
           <p class="strip-label muted">What the chain stores</p>
           <p class="strip-hex mono" data-strip-hex></p>
           <p class="strip-label muted">What it says</p>
           <p class="strip-en" data-strip-en aria-live="polite"></p>
         </div>
       </div>
-      <ul class="cards4" data-reveal-group>
-        <li class="card" data-reveal><h3>What it called</h3><p class="muted">The function and its arguments, by name.</p></li>
-        <li class="card" data-reveal><h3>What moved</h3><p class="muted">BOT and token transfers, with amounts and addresses.</p></li>
-        <li class="card" data-reveal><h3>What it cost</h3><p class="muted">Gas used, gas price and the fee in BOT.</p></li>
-        <li class="card" data-reveal><h3>Why it failed</h3><p class="muted">The revert reason, and a short list of fixes to try.</p></li>
+      <ul class="cards4">
+        <li class="card" data-spot data-reveal><h3>Function and inputs</h3><p class="mono sample">transfer(to, 10 USDT)</p><p class="muted">Named, with each input in a readable form.</p></li>
+        <li class="card" data-spot data-reveal><h3>Money moved</h3><p class="mono sample">10 USDT, A to B</p><p class="muted">BOT and token transfers, with who sent what to whom.</p></li>
+        <li class="card" data-spot data-reveal><h3>Events</h3><p class="mono sample">Transfer(from, to, value)</p><p class="muted">Each event as a small card. Unknown ones stay raw.</p></li>
+        <li class="card" data-spot data-reveal><h3>Gas and cost</h3><p class="mono sample">70,000 of 70,000 gas</p><p class="muted">Gas used against the limit, and the fee in BOT.</p></li>
       </ul>
     </section>
 
-    <section class="band container story" id="story" aria-labelledby="story-h">
-      <div class="story-copy" data-reveal>
-        <h2 class="sec-h" id="story-h">A failed transaction, start to finish</h2>
-        <p class="lead">Out of gas is the classic. Here is how it reads.</p>
-        <a class="btn btn--quiet" href="/tx/0x79010ee0b1ec1099b1a31038a43b08bed3576be66468c5de9c8b306bf4a1aa2f">Open this transaction</a>
+    <section class="band tour" id="tour" aria-labelledby="tour-h">
+      <div class="container tour-head" data-reveal>
+        <p class="sec-label mono"><span class="num">04</span>Walkthrough</p>
+      <h2 class="sec-h" id="tour-h">A failed transaction, start to finish</h2>
+        <p class="lead">Out of gas is the classic one. This is how TxExplain reads it. <span class="tag">Example</span></p>
       </div>
-      <div class="chat card" aria-label="Example conversation">
-        <span class="tag chat-tag">Example</span>
-        <ol class="chat-log" data-story>
-          <li class="bubble bubble--me">My transaction failed. Why?</li>
-          <li class="chat-status mono">Looked up the hash on BOT Chain Testnet</li>
-          <li class="chat-status mono">Gas used equals the gas limit</li>
-          <li class="bubble bubble--tx">It ran out of gas. The limit was 70,000 and all of it was used.</li>
-          <li class="chat-status mono">Fix: raise the gas limit and send it again</li>
-          <li class="chat-status chat-status--ok mono">Note saved on-chain: “Raise the gas limit.”</li>
-        </ol>
+      <div class="tour-track" data-tour>
+        <div class="tour-sticky container">
+          <ol class="rail" data-rail>
+            <li><strong>Paste the hash</strong><span>One field. BOT Chain mainnet is tried first, then testnet.</span></li>
+            <li><strong>Read the call</strong><span>Who called what, and how much gas it burned.</span></li>
+            <li><strong>Find the reason</strong><span>Used gas equals the limit, so it ran out of gas.</span></li>
+            <li><strong>Try the fix</strong><span>A short checklist, chosen from the decoded facts.</span></li>
+            <li><strong>Leave a note</strong><span>The fix goes on-chain, so the next person finds it.</span></li>
+          </ol>
+          <div class="phone" data-phone role="group" aria-label="Example conversation">
+            <div class="phone-bar"><span class="phone-title"><svg class="logo-mark" viewBox="0 0 28 28" width="22" height="22" aria-hidden="true"><rect width="28" height="28" rx="8" fill="var(--color-accent)"/><path d="M7.5 14h10M13.5 9.5 18 14l-4.5 4.5" fill="none" stroke="var(--color-accent-ink)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>TxExplain</span><span class="tag">Example</span></div>
+            <div class="chat" data-chat>
+              <div class="msg msg--me" data-stage="0"><code class="mono">0x79010ee0…a1aa2f</code></div>
+              <p class="msg-status mono" data-stage="0">Read from BOT Chain Testnet</p>
+              <div class="msg msg--bot" data-stage="1"><strong>DebugNotes.addNote</strong><span class="mono">Gas 70,000 of 70,000</span></div>
+              <div class="msg msg--bot msg--fail" data-stage="2"><span class="status status--fail" data-shake aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path pathLength="1" d="M4.4 4.4 11.6 11.6M11.6 4.4 4.4 11.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>It failed: out of gas.</span></div>
+              <div class="msg msg--bot" data-stage="3"><span class="msg-label">Try this</span><ul class="checks"><li><span class="tick" aria-hidden="true"></span>Raise the gas limit above 70,000</li></ul></div>
+              <div class="msg msg--note" data-stage="4"><span class="tag tag--ok">Fix</span><p>Raise the gas limit.</p><span class="msg-label">Saved on BOT Chain Testnet</span></div>
+            </div>
+            <div class="chat-chips" data-chat-chips><button type="button" class="chip" data-example="customError">A failed one</button><button type="button" class="chip" data-example="success">A success</button><button type="button" class="chip" data-example="transfer">A transfer</button></div>
+            <form class="composer" data-composer-form novalidate>
+              <label class="visually-hidden" for="chat-input">Transaction hash</label>
+              <input class="composer-input mono" id="chat-input" data-composer type="text" placeholder="Paste a tx hash" autocomplete="off" autocapitalize="off" spellcheck="false">
+              <button type="submit" class="send" aria-label="Explain this hash"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 13V3.5M3.8 7.4 8 3.2l4.2 4.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            </form>
+          </div>
+        </div>
       </div>
+      <div class="container"><a class="btn btn--quiet" href="/tx/0x79010ee0b1ec1099b1a31038a43b08bed3576be66468c5de9c8b306bf4a1aa2f">See the full example</a></div>
     </section>
 
     <section class="band container" id="how" aria-labelledby="how-h">
-      <h2 class="sec-h" id="how-h" data-reveal>How it works</h2>
+      <p class="sec-label mono"><span class="num">05</span>Sources</p>
+      <h2 class="sec-h" id="how-h" data-split>Four sources, one set of facts</h2>
       <div class="pipe" data-reveal>
         <ul class="pipe-in">
           <li class="chip">Receipt and logs</li>
@@ -112,28 +171,43 @@
           <li class="chip">Public signatures</li>
           <li class="chip">Revert replay</li>
         </ul>
-        <svg class="pipe-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-          <path d="M0 12.5 C50 12.5 50 50 100 50"/><path d="M0 37.5 C50 37.5 50 50 100 50"/><path d="M0 62.5 C50 62.5 50 50 100 50"/><path d="M0 87.5 C50 87.5 50 50 100 50"/>
-        </svg>
+        <canvas class="pipe-canvas" aria-hidden="true"></canvas>
         <div class="pipe-out">
           <p class="pipe-node pipe-node--facts"><strong>Decoded facts</strong><span class="muted">Function, amounts, events, reason</span></p>
+          <span class="pipe-link" aria-hidden="true"></span>
           <p class="pipe-node"><strong>Plain-English summary</strong><span class="muted">Written from the facts only</span></p>
         </div>
       </div>
     </section>
 
     <section class="band container" id="trust" aria-labelledby="trust-h">
-      <h2 class="sec-h" id="trust-h" data-reveal>What you can rely on</h2>
-      <ul class="cards3">
-        <li class="card" data-reveal><h3>Decoded first</h3><p class="muted">The summary starts from decoded fields.</p><button type="button" class="tip" aria-label="More on decoded first" aria-describedby="tip-1">?</button><span class="tip-box" id="tip-1" role="tooltip">The AI gets the decoded facts and nothing else. It never sees your wallet.</span></li>
-        <li class="card" data-reveal><h3>Numbers are checked</h3><p class="muted">A made-up figure is thrown away.</p><button type="button" class="tip" aria-label="More on checked numbers" aria-describedby="tip-2">?</button><span class="tip-box" id="tip-2" role="tooltip">A check rejects any number or hex the decoder did not produce, then falls back to a plain template.</span></li>
-        <li class="card" data-reveal><h3>Notes live on-chain</h3><p class="muted">Anyone can read them on the explorer.</p><button type="button" class="tip" aria-label="More on on-chain notes" aria-describedby="tip-3">?</button><span class="tip-box" id="tip-3" role="tooltip">Debug notes are stored in the DebugNotes contract. Saving one costs a little gas.</span></li>
+      <p class="sec-label mono"><span class="num">06</span>Trust</p>
+      <h2 class="sec-h" id="trust-h" data-split>Built to be trusted</h2>
+      <ul class="cards4 cards4--trust">
+        <li class="card" data-spot data-reveal><h3>Facts first</h3><p class="muted">The AI only uses decoded data.</p><button type="button" class="tip" aria-label="More on facts first" aria-describedby="tip-1">?</button><span class="tip-box" id="tip-1" role="tooltip">The AI gets the decoded facts and nothing else. A check throws out any number it was not given.</span></li>
+        <li class="card" data-spot data-reveal><h3>Open sources</h3><p class="muted">The public 4byte directory and your own ABIs.</p><button type="button" class="tip" aria-label="More on open sources" aria-describedby="tip-2">?</button><span class="tip-box" id="tip-2" role="tooltip">An unknown function is looked up in the 4byte directory and labelled as a guess.</span></li>
+        <li class="card" data-spot data-reveal><h3>No keys needed</h3><p class="muted">Reading is free. A wallet is for notes only.</p><button type="button" class="tip" aria-label="More on keys" aria-describedby="tip-3" >?</button><span class="tip-box" id="tip-3" role="tooltip">Explaining a transaction never asks for a wallet. Connect one only to save a note or mark a fix.</span></li>
+        <li class="card" data-spot data-reveal><h3>Notes on-chain</h3><p class="muted">Anyone can read them on the explorer.</p><button type="button" class="tip" aria-label="More on notes" aria-describedby="tip-4">?</button><span class="tip-box" id="tip-4" role="tooltip">Debug notes live in the DebugNotes contract. Saving one costs a little gas.</span></li>
       </ul>
     </section>
 
-    <section class="band container closing" aria-labelledby="closing-h" data-reveal>
-      <h2 class="sec-h" id="closing-h">Paste a hash.</h2>
-      <a class="btn btn--primary" href="/app">Explain a transaction</a>
+
+    <section class="band container" id="faq" aria-labelledby="faq-h">
+      <p class="sec-label mono"><span class="num">07</span>Questions</p>
+      <h2 class="sec-h" id="faq-h" data-split>Short answers</h2>
+      <div class="faq">
+        <details name="faq"><summary>Which networks does it read?</summary><p>BOT Chain mainnet and testnet. It tries mainnet first, then testnet.</p></details>
+        <details name="faq"><summary>Do I need a wallet?</summary><p>No. A wallet is only for saving a debug note or marking a fix as worked.</p></details>
+        <details name="faq"><summary>Can I trust the AI summary?</summary><p>It is written from decoded facts only. A check rejects any number or hex it was not given, and a plain template takes over if the check fails.</p></details>
+        <details name="faq"><summary>Why is a revert reason sometimes missing?</summary><p>Finding it can need a replay at the old block, and public RPCs often keep only recent state. When a replay is not possible, TxExplain says so and lists the usual causes.</p></details>
+        <details name="faq"><summary>What does a debug note cost?</summary><p>A note is a normal transaction, so it costs a little gas in BOT. Reading notes is free.</p></details>
+      </div>
+    </section>
+
+    <section class="band container closing" aria-labelledby="closing-h" data-hexhost>
+      <canvas class="hexfield" aria-hidden="true"></canvas>
+      <h2 class="closing-h" id="closing-h" data-split>Every transaction tells a story. Read yours.</h2>
+      <a class="btn btn--primary" href="/app" data-magnet>Explain a transaction</a>
     </section>
   </main>
   <div id="site-footer"></div>

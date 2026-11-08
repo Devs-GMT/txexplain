@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   setCors(req, res);
   if (!checkOrigin(req)) return res.status(403).json({ error: "origin not allowed" });
   if (req.method !== "GET") return res.status(405).json({ error: "GET only" });
-  if (rateLimited(req)) return res.status(429).json({ error: "slow down" });
+  if (rateLimited(req, { limit: 30, name: "sig" })) return res.status(429).json({ error: "slow down" });
 
   const selector = String(req.query?.selector ?? "").toLowerCase();
   if (!/^0x[0-9a-f]{8}$/.test(selector)) return res.status(400).json({ error: "selector must be 0x plus 8 hex digits" });

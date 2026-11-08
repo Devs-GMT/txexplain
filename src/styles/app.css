@@ -182,3 +182,16 @@
 .status-card dd.addr code { font-size: var(--text-sm); white-space: nowrap; }
 [data-notes-list] + [data-notes-form] { margin-top: var(--space-md); }
 [data-notes-list] > p { margin-bottom: var(--space-sm); }
+
+/* giga.ai-style finish: the hex field behind the input, a scan line while the chain is read, dot-matrix for what the chain says back */
+.app-hero { position: relative; isolation: isolate; padding-block: var(--space-xl) var(--space-lg); margin-bottom: var(--space-lg); }
+.app-top .label { justify-self: center; }
+.app-top h1 { font-weight: 900; letter-spacing: -0.04em; }
+.has-result .app-top .label { justify-self: start; }
+.dot { font-family: var(--font-dot); font-weight: 700; letter-spacing: 0; }
+.scan { margin: var(--space-md) 0 0; font-size: var(--text-xs); color: var(--color-accent); overflow-wrap: anywhere; line-height: 1.7; }
+.timeline::before { transform-origin: top; animation: line-draw 0.9s var(--ease-out) 0.5s both; }
+@keyframes line-draw { from { transform: scaleY(0); } }
+.kv > div { transition: background-color var(--dur-short) var(--ease-out); }
+.event { transition: border-color var(--dur-short) var(--ease-out); }
+.event:hover { border-color: var(--color-accent); }

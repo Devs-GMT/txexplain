@@ -50,9 +50,15 @@ export const BUNDLED_ABIS = Object.entries(sources).map(([name, fragments]) => (
 }));
 
 /// Accepts a plain ABI array or a Hardhat/Remix artifact ({ abi: [...] }), as JSON text or parsed.
+// An ABI is pasted or dropped by the visitor, so its size is bounded before it is parsed.
+const MAX_ABI_CHARS = 600_000;
+const MAX_ABI_ENTRIES = 3000;
+
 export function parseUserAbi(input) {
+  if (typeof input === "string" && input.length > MAX_ABI_CHARS) throw new Error("That ABI is too large. Paste only the abi array.");
   const parsed = typeof input === "string" ? JSON.parse(input) : input;
   const abi = Array.isArray(parsed) ? parsed : parsed?.abi;
   if (!Array.isArray(abi)) throw new Error("ABI must be a JSON array or an artifact with an abi field");
+  if (abi.length > MAX_ABI_ENTRIES) throw new Error("That ABI has too many entries.");
   return { name: "your ABI", iface: new Interface(abi) };
 }

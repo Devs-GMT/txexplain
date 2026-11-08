@@ -9,8 +9,12 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=JetBrains+Mono:wght@400&display=swap">
-  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Doto:wght@500;700;900&display=swap">
+  <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=satoshi@500,700,900&display=swap">
+  <link rel="stylesheet" href="/src/styles/tokens.css">
+  <link rel="stylesheet" href="/src/styles/base.css">
+  <link rel="stylesheet" href="/src/styles/components.css">
+  <link rel="stylesheet" href="/src/styles/app.css">
   <script type="module" src="/src/app/app.js"></script>
 </head>
 <body>
@@ -18,7 +22,10 @@
   <div id="site-header"></div>
   <main id="main" class="container app">
     <noscript><p class="note">TxExplain reads the chain in your browser, so it needs JavaScript.</p></noscript>
+    <div class="app-hero" data-hexhost>
+    <canvas class="hexfield" aria-hidden="true"></canvas>
     <section class="app-top" aria-labelledby="app-h">
+      <p class="label mono">Explain</p>
       <h1 id="app-h">Paste a transaction hash.</h1>
       <form id="hash-form" class="hash-form" novalidate>
         <label class="visually-hidden" for="hash-input">Transaction hash</label>
@@ -36,6 +43,7 @@
         <div class="abi-actions"><button type="button" class="btn btn--quiet btn--sm" id="abi-apply">Use this ABI</button><input type="file" id="abi-file" accept=".json,application/json" class="visually-hidden" tabindex="-1"><button type="button" class="btn btn--quiet btn--sm" id="abi-pick">Choose a file</button><span class="muted" id="abi-status" role="status"></span></div>
       </details>
     </section>
+    </div>
     <div id="stage" aria-live="polite"></div>
   </main>
   <div id="site-footer"></div>

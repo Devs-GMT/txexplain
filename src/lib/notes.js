@@ -93,6 +93,9 @@ export const noteByteLength = (text) => new TextEncoder().encode(text).length;
 
 export async function saveNote(chainId, txHash, tag, text) {
   const trimmed = text.trim();
+  if (!DEBUG_NOTES[chainId]) throw describeWalletError({ message: `Debug notes are not live on ${CHAINS[chainId]?.name ?? "this network"} yet.` });
+  if (!/^0x[0-9a-fA-F]{64}$/.test(txHash)) throw describeWalletError({ message: "That is not a transaction hash." });
+  if (!Number.isInteger(tag) || tag < 0 || tag >= TAGS.length) throw describeWalletError({ message: "Pick a tag for the note." });
   if (!trimmed) throw describeWalletError({ message: "Write a note first." });
   if (noteByteLength(trimmed) > MAX_NOTE_BYTES) throw describeWalletError({ message: `Notes are limited to ${MAX_NOTE_BYTES} bytes.` });
   try {
@@ -107,6 +110,8 @@ export async function saveNote(chainId, txHash, tag, text) {
 }
 
 export async function markWorked(chainId, id) {
+  if (!DEBUG_NOTES[chainId]) throw describeWalletError({ message: `Debug notes are not live on ${CHAINS[chainId]?.name ?? "this network"} yet.` });
+  if (!Number.isInteger(id) || id < 0) throw describeWalletError({ message: "That note does not exist." });
   try {
     const signer = await signerFor(chainId);
     const receipt = await (await new Contract(DEBUG_NOTES[chainId], ABI, signer).markWorked(id)).wait();

@@ -1,15 +1,15 @@
 /* Shared by the website and the app. Colours come from tokens.css only. */
 
 body { font-size: var(--text-md); }
-h1, h2, h3 { font-weight: 700; letter-spacing: var(--tracking-display); line-height: 1.1; color: var(--color-ink); }
-.mono, code, pre { font-family: var(--font-outlier); font-weight: 400; font-variant-ligatures: none; }
+h1, h2, h3 { font-weight: 700; letter-spacing: var(--tracking-display); line-height: 1.1; color: var(--color-ink); font-feature-settings: "ss01", "kern"; }
+.mono, code, pre { font-family: var(--font-outlier); font-weight: 400; font-variant-ligatures: none; font-feature-settings: "zero", "ss02"; }
 .muted { color: var(--color-muted); }
 :where(strong) { font-weight: 600; }
 
 /* Buttons: pills. One amber primary per screen, ghost outline for the rest. */
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: var(--space-xs); min-height: 48px; padding: 0 var(--space-lg); border: 1px solid transparent; border-radius: var(--radius-pill); font: 600 var(--text-md)/1 var(--font-body); white-space: nowrap; text-decoration: none; cursor: pointer; transition: background-color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out); }
-.btn--primary { background: var(--color-accent); color: var(--color-accent-ink); }
-.btn--primary:hover { background: color-mix(in oklab, var(--color-accent) 88%, var(--color-ink)); }
+.btn--primary { background: var(--color-accent); color: var(--color-accent-ink); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 35%, transparent), 0 6px 20px -8px color-mix(in oklab, var(--color-accent) 60%, transparent); }
+.btn--primary:hover { background: color-mix(in oklab, var(--color-accent) 88%, var(--color-ink)); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 40%, transparent), 0 10px 28px -8px color-mix(in oklab, var(--color-accent) 70%, transparent); }
 .btn--quiet { background: transparent; color: var(--color-ink); border-color: var(--color-rule); }
 .btn--quiet:hover { background: var(--color-paper-2); border-color: var(--color-muted); }
 .btn--sm { min-height: 40px; padding: 0 var(--space-md); font-size: var(--text-sm); }
@@ -38,9 +38,15 @@ h1, h2, h3 { font-weight: 700; letter-spacing: var(--tracking-display); line-hei
 .status--fail { background: color-mix(in oklab, var(--color-error) 18%, transparent); color: var(--color-error); }
 .status--wait { background: color-mix(in oklab, var(--color-accent) 18%, transparent); color: var(--color-accent); }
 
-/* A card has a hairline border and no shadow; only a failed card tints its whole border. */
-.card { background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: var(--radius-card); padding: var(--space-lg); }
-.card--fail { border-color: color-mix(in oklab, var(--color-error) 45%, var(--color-rule)); }
+/* A card has a hairline border and no shadow. Explanation cards carry a thin status-coloured top border, as the PRD asks. */
+.card { background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: var(--radius-card); padding: var(--space-lg); box-shadow: inset 0 1px 0 color-mix(in oklab, var(--color-ink) 5%, transparent); }
+.card--ok { border-top: 2px solid var(--color-success); }
+.card--fail { border-top: 2px solid var(--color-error); }
+.card--wait { border-top: 2px solid var(--color-accent); }
+.card--info { border-top: 2px solid var(--color-info); }
+.ico { overflow: visible; }
+.ico path { stroke-dasharray: 1; stroke-dashoffset: 0; animation: draw 0.55s var(--ease-out) 0.15s both; }
+@keyframes draw { from { stroke-dashoffset: 1; } }
 
 .addr { display: inline-flex; align-items: center; gap: var(--space-2xs); }
 .is-typing::after { content: ""; display: inline-block; width: 2px; height: 1em; margin-left: 2px; vertical-align: -0.12em; background: var(--color-accent); }
@@ -48,7 +54,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: var(--tracking-display); line-hei
 .field { width: 100%; min-height: 52px; padding: 0 var(--space-md); border: 1px solid var(--color-rule); border-radius: var(--radius-pill); background: var(--color-paper-2); color: var(--color-ink); font: 400 var(--text-md)/1 var(--font-outlier); transition: border-color var(--dur-short) var(--ease-out); }
 .field::placeholder { color: var(--color-muted); }
 .field:hover { border-color: var(--color-muted); }
-.field:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; border-color: var(--color-accent); }
+.field:focus-visible { outline: 2px solid var(--color-focus); outline-offset: -2px; border-color: var(--color-accent); box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 16%, transparent), 0 0 40px color-mix(in oklab, var(--color-accent) 22%, transparent); }
 .field[aria-invalid="true"] { border-color: var(--color-error); }
 .field-error { min-height: 1lh; margin-top: var(--space-xs); font-size: var(--text-sm); color: var(--color-error); }
 
@@ -83,7 +89,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: var(--tracking-display); line-hei
 
 /* Footer: the explanation card, then the link columns */
 .footer { margin-top: var(--section-gap); padding-block: var(--space-2xl) var(--space-xl); border-top: 1px solid var(--color-rule); }
-.explain-card { background: var(--color-paper-2); border: 1px solid var(--color-rule); border-radius: var(--radius-card); padding: var(--space-lg); display: grid; gap: var(--space-lg); }
+.explain-card { background: var(--color-paper-2); border: 1px solid var(--color-rule); border-top: 2px solid var(--color-success); border-radius: var(--radius-card); padding: var(--space-lg); display: grid; gap: var(--space-lg); }
 .explain-card-head { display: flex; align-items: center; gap: var(--space-md); }
 .explain-card-text { font-size: var(--text-lg); color: var(--color-ink); max-width: none; min-height: 1.4em; }
 .explain-card-body { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-lg) var(--space-xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-rule); }
@@ -105,3 +111,25 @@ h1, h2, h3 { font-weight: 700; letter-spacing: var(--tracking-display); line-hei
 .footer-legal { margin-top: var(--space-2xl); padding-top: var(--space-lg); border-top: 1px solid var(--color-rule); color: var(--color-muted); font-size: var(--text-sm); max-width: none; }
 @media (max-width: 60rem) { .footer-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } .footer-brand { grid-column: 1 / -1; } .explain-card-body .btn { margin-left: 0; } }
 @media (max-width: 40rem) { .explain-card-body { align-items: flex-start; flex-direction: column; } .explain-card-body .btn { width: 100%; } }
+
+/* Pointer effects shared by the website and the app */
+.hexfield { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; -webkit-mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, var(--color-paper) 30%, transparent 100%); mask-image: radial-gradient(ellipse 85% 80% at 50% 45%, var(--color-paper) 30%, transparent 100%); }
+.cursor-glow { position: fixed; top: 0; left: 0; z-index: -1; width: 440px; height: 440px; margin: -220px 0 0 -220px; border-radius: var(--radius-pill); background: radial-gradient(circle, color-mix(in oklab, var(--color-accent) 10%, transparent), transparent 62%); pointer-events: none; opacity: 0; transition: opacity var(--dur-long) var(--ease-out); }
+.card[data-spot] { position: relative; isolation: isolate; transition: border-color var(--dur-short) var(--ease-out); }
+.card[data-spot]::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit; background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 0%), color-mix(in oklab, var(--color-accent) 13%, transparent), transparent 70%); opacity: 0; transition: opacity var(--dur-long) var(--ease-out); }
+.card[data-spot]::after { content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), color-mix(in oklab, var(--color-ink) 9%, transparent), transparent 65%); opacity: 0; transition: opacity var(--dur-long) var(--ease-out); }
+.card[data-spot]:hover { border-color: var(--color-accent); }
+.card[data-spot]:hover::before, .card[data-spot]:hover::after { opacity: 1; }
+.card--ok[data-spot]:hover, .card--fail[data-spot]:hover, .card--wait[data-spot]:hover { border-color: var(--color-rule); }
+
+/* giga.ai-style details: an amber square before a mono label, faint column lines behind the page, a ring that runs round a focused field */
+.label { display: inline-flex; align-items: center; margin: 0 0 var(--space-md); font-weight: 500; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-ink-2); }
+.label::before, .sec-label::before { content: ""; display: inline-block; width: 8px; height: 8px; margin-right: var(--space-sm); background: var(--color-accent); }
+.sec-label { display: flex; align-items: center; }
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none; background-image: linear-gradient(90deg, color-mix(in oklab, var(--color-rule) 70%, transparent) 1px, transparent 1px); background-size: calc((min(100%, var(--container)) - 2 * var(--gutter)) / 6) 100%; background-position: 50% 0; opacity: 0.5; }
+@property --ring { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+.field--big { border: 1px solid transparent; background: linear-gradient(var(--color-paper-2), var(--color-paper-2)) padding-box, linear-gradient(var(--color-rule), var(--color-rule)) border-box; }
+.field--big:hover { background: linear-gradient(var(--color-paper-2), var(--color-paper-2)) padding-box, linear-gradient(var(--color-muted), var(--color-muted)) border-box; }
+.field--big:focus-visible { outline: none; background: linear-gradient(var(--color-paper-2), var(--color-paper-2)) padding-box, conic-gradient(from var(--ring), var(--color-accent), var(--color-info), transparent 30%, transparent 62%, var(--color-accent)) border-box; animation: ring 3.2s linear infinite; }
+@keyframes ring { to { --ring: 360deg; } }
+.switch button { text-transform: uppercase; letter-spacing: 0.06em; font-family: var(--font-outlier); font-weight: 500; font-size: var(--text-xs); }
