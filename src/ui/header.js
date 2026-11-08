@@ -14,7 +14,7 @@ export const navbar = html`<header class="nav" data-nav>
     <button type="button" class="nav-toggle btn btn--quiet btn--sm" aria-expanded="false" aria-controls="nav-menu">Menu</button>
     <div class="nav-menu" id="nav-menu">
       <nav class="nav-links" aria-label="Main">
-        <a href="/#how">Product</a>
+        <a href="/">Product</a>
         <a href="/#tour">Examples</a>
         <a href="${LINKS.botchainDocs}" target="_blank" rel="noopener">Docs</a>
       </nav>
