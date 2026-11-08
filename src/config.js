@@ -28,6 +28,6 @@ export const LINKS = {
   botchain: "https://botchain.ai",
   botchainDocs: "https://dev-docs.botchain.ai/docs/intro/",
   faucet: "https://faucet.botchain.ai/basic",
-  x: "https://x.com/botprojectgf",
+  x: "https://x.com/TxExplain",
   github: "https://github.com/Devs-GMT/txexplain",
 };
